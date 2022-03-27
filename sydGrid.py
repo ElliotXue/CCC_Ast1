@@ -1,16 +1,16 @@
 
 
 class Grid:
-    def __init__(self, top_left, bottom_right):
-        self.top_left = top_left
-        self.bottom_right = bottom_right
+    def __init__(self, max_longitude, min_longitude, max_latitude, min_latitude):
+        self.max_longitude = max_longitude
+        self.min_longitude = min_longitude
+        self.max_latitude = max_latitude
+        self.min_latitude = min_latitude
 
     def contains(self, coordinate):
-        (longitude_coordinate, latitude_coordinate) = coordinate
-        (longitude_top_left, latitude_top_left) = self.top_left
-        (longitude_bottom_right, latitude_bottom_right) = self.bottom_right
-        if (longitude_top_left < longitude_coordinate <= longitude_bottom_right and
-                latitude_top_left <= latitude_coordinate < latitude_bottom_right):
+        (longitude, latitude) = coordinate
+        if (self.min_longitude < longitude <= self.max_longitude and
+                self.min_latitude < latitude <= self.max_latitude):
             return True
         else:
             return False
