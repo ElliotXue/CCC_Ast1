@@ -1,6 +1,6 @@
 import json
 
-from sydGrid import Grid
+from Grid import Grid
 
 
 def generate_grid(file):

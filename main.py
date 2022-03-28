@@ -4,7 +4,7 @@ import mmap
 
 with open("tinyTwitter.json", "r+b") as f:
     lst = []
-    str1=""
+    str1 = ""
     mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
     for line in iter(mm.readline, b""):
         str_line = line.decode().strip()
@@ -18,7 +18,10 @@ with open("tinyTwitter.json", "r+b") as f:
 
 a = json.loads(str1)
 print(id(a))
-print(a["total_rows"])
+for i in a["rows"]:
+    if i["doc"]["coordinates"] is not None:
+        print(i["doc"]["coordinates"])
+
 
 
 
