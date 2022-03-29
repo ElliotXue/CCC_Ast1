@@ -1,30 +1,31 @@
 import json
 import mmap
 
+from Utils import generate_grid
 
-with open("tinyTwitter.json", "r+b") as f:
-    lst = []
-    str1 = ""
+with open("smallTwitter.json", "r+b") as f:
     mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+    count = -1
+    total_rows = 0
+    offset = 0
     for line in iter(mm.readline, b""):
         str_line = line.decode().strip()
-        str1 += str_line
-        lst.append(str_line)
-    head_row = lst[0] + lst[-1]
-    rest_lst = lst[1:-1]
-    for row in rest_lst:
-        new_row = row[:-1]
-        obj = json.loads(new_row)
+        if count == -1:
+            str_line += "]}"
+            head_row = json.loads(str_line)
+            total_rows = head_row["total_rows"]
+            # offset = head_row["offset"]
+            total_rows = total_rows - offset
 
-a = json.loads(str1)
-print(id(a))
-for i in a["rows"]:
-    if i["doc"]["coordinates"] is not None:
-        print(i["doc"]["coordinates"])
+        elif count < total_rows-1:
+            str_line = str_line[:-1]
+            tweet = json.loads(str_line)
 
+        elif count == total_rows-1:
+            tweet = json.loads(str_line)
 
+        count += 1
 
-
-
+grids = generate_grid("sydGrid.json")
 
 
