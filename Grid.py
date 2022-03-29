@@ -35,6 +35,7 @@ class Grid:
                 self.language_info[language] += grid.language_info[language]
             else:
                 self.language_info[language] = grid.language_info[language]
+        self.total_tweets += grid.total_tweets
 
 
 

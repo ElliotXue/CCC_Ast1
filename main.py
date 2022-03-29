@@ -1,4 +1,4 @@
-from Utils import integration
+from Utils import integration, output_print
 from WorkUnit import WorkUnit
 from mpi4py import MPI
 
@@ -14,8 +14,7 @@ if rank == 0:
     for task in range(1, size):
         other_grids = comm.recv(source=task)
         integration(my_grids, other_grids)
-    for i in my_grids:
-        print(i.cell_name + str(i.language_info))
+    output_print(my_grids)
 else:
     my_grids = work_unit.process_data("bigTwitter.json")
     comm.send(my_grids, dest=0)
