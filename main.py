@@ -1,31 +1,21 @@
-import json
-import mmap
+from Utils import integration
+from WorkUnit import WorkUnit
+from mpi4py import MPI
 
-from Utils import generate_grid
+comm = MPI.COMM_WORLD
+size = comm.Get_size()
+rank = comm.Get_rank()
 
-with open("smallTwitter.json", "r+b") as f:
-    mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-    count = -1
-    total_rows = 0
-    offset = 0
-    for line in iter(mm.readline, b""):
-        str_line = line.decode().strip()
-        if count == -1:
-            str_line += "]}"
-            head_row = json.loads(str_line)
-            total_rows = head_row["total_rows"]
-            # offset = head_row["offset"]
-            total_rows = total_rows - offset
-
-        elif count < total_rows-1:
-            str_line = str_line[:-1]
-            tweet = json.loads(str_line)
-
-        elif count == total_rows-1:
-            tweet = json.loads(str_line)
-
-        count += 1
-
-grids = generate_grid("sydGrid.json")
+work_unit = WorkUnit(rank, size, "language.json", "sydGrid.json")
 
 
+if rank == 0:
+    my_grids = work_unit.process_data("bigTwitter.json")
+    for task in range(1, size):
+        other_grids = comm.recv(source=task)
+        integration(my_grids, other_grids)
+    for i in my_grids:
+        print(i.cell_name + str(i.language_info))
+else:
+    my_grids = work_unit.process_data("bigTwitter.json")
+    comm.send(my_grids, dest=0)

@@ -23,9 +23,15 @@ def generate_grid(file):
         grid = Grid(max_longitude, min_longitude, max_latitude, min_latitude, id)
         grids.append(grid)
     grids = sorted(grids, key=lambda x: (-x.center_point[1], x.center_point[0]))
-    count=0
+    count = 0
     for letter in "ABCD":
         for num in range(1, 5):
-            grids[count].cell_name = letter+str(num)
+            grids[count].cell_name = letter + str(num)
             count += 1
+    f1.close()
     return grids
+
+
+def integration(grids_1, grids_2):
+    for i in range(len(grids_1)):
+        grids_1[i].combine(grids_2[i])
