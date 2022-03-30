@@ -10,11 +10,11 @@ work_unit = WorkUnit(rank, size, "language.json", "sydGrid.json")
 
 
 if rank == 0:
-    my_grids = work_unit.process_data("bigTwitter.json")
+    my_grids = work_unit.process_data("smallTwitter.json")
     for task in range(1, size):
         other_grids = comm.recv(source=task)
         integration(my_grids, other_grids)
     output_print(my_grids)
 else:
-    my_grids = work_unit.process_data("bigTwitter.json")
+    my_grids = work_unit.process_data("smallTwitter.json")
     comm.send(my_grids, dest=0)

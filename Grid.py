@@ -12,8 +12,6 @@ class Grid:
         self.total_tweets = 0
         self.language_info = {}
 
-
-
     def contains(self, coordinate):
         (longitude, latitude) = coordinate
         if (self.min_longitude < longitude <= self.max_longitude and

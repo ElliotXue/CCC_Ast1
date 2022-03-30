@@ -19,21 +19,23 @@ class WorkUnit:
             total_rows = 0
             offset = 0
             for line in iter(mm.readline, b""):
-                str_line = line.decode().strip()
                 if count == -1:
+                    str_line = line.decode().strip()
                     str_line += "]}"
                     head_row = json.loads(str_line)
                     total_rows = head_row["total_rows"]
-                    offset = head_row["offset"]
+                    #offset = head_row["offset"]
                     total_rows = total_rows - offset
                 elif count < total_rows - 1:
                     if count % self.total_cores == self.id:
+                        str_line = line.decode().strip()
                         str_line = str_line[:-1]
                         tweet = json.loads(str_line)
                         self.extract_data(tweet)
 
                 elif count == total_rows - 1:
                     if count % self.total_cores == self.id:
+                        str_line = line.decode().strip()
                         tweet = json.loads(str_line)
                         self.extract_data(tweet)
                 count += 1
