@@ -12,6 +12,7 @@ class Grid:
         self.total_tweets = 0
         self.language_info = {}
 
+    # determine if the coordinate inside the current grid
     def contains(self, coordinate):
         (longitude, latitude) = coordinate
         if (self.min_longitude < longitude <= self.max_longitude and
@@ -20,13 +21,14 @@ class Grid:
         else:
             return False
 
+    # update tweets number for the current grid
     def add_tweet(self, language):
         if language in self.language_info.keys():
             self.language_info[language] += 1
         else:
             self.language_info[language] = 1
         self.total_tweets += 1
-
+    
     def combine(self, grid):
         for language in grid.language_info.keys():
             if language in self.language_info.keys():

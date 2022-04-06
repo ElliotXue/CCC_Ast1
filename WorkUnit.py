@@ -13,29 +13,31 @@ class WorkUnit:
         self.grids = generate_grid(grid_file)
 
     def process_data(self, file):
+        # reading the file line by line
         with open(file, "rb") as f:
             mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
             count = -1
             total_rows = 0
             offset = 0
             for line in iter(mm.readline, b""):
+                str_line = line.decode().strip()
+                # dealing with the first line
                 if count == -1:
-                    str_line = line.decode().strip()
                     str_line += "]}"
                     head_row = json.loads(str_line)
                     total_rows = head_row["total_rows"]
-                    #offset = head_row["offset"]
+                    offset = head_row["offset"]
                     total_rows = total_rows - offset
+                # dealing with tweets data
                 elif count < total_rows - 1:
+                    # determine which process to analyis the current line
                     if count % self.total_cores == self.id:
-                        str_line = line.decode().strip()
                         str_line = str_line[:-1]
                         tweet = json.loads(str_line)
                         self.extract_data(tweet)
-
+                # last line
                 elif count == total_rows - 1:
                     if count % self.total_cores == self.id:
-                        str_line = line.decode().strip()
                         tweet = json.loads(str_line)
                         self.extract_data(tweet)
                 count += 1

@@ -4,7 +4,7 @@ from Grid import Grid
 
 MAX = 10
 
-
+# generate grids for each process
 def generate_grid(file):
     grids = []
     f1 = open(file)
@@ -33,12 +33,12 @@ def generate_grid(file):
     f1.close()
     return grids
 
-
+# combine the result from grids list grids_1 with grids_2
 def integration(grids_1, grids_2):
     for i in range(len(grids_1)):
         grids_1[i].combine(grids_2[i])
 
-
+# print the final result
 def output_print(grids):
     print("         Cell         #Total Tweets         #Number of Languages Used         #Top 10 Languages & #Tweets")
     for grid in grids:
